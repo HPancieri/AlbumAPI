@@ -11,5 +11,7 @@ func main() {
 	router.GET("/albums/:id", endpoints.GetAlbumById)
 	router.POST("/albums", endpoints.PostAlbum)
 
-	router.Run("localhost:8080")
+	if err := router.Run("localhost:8080"); err != nil {
+		return
+	}
 }
