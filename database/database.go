@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	//	"github.com/HPancieri/AlbumAPI/models"
 	"github.com/HPancieri/AlbumAPI/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
