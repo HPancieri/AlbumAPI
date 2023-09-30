@@ -3,8 +3,33 @@ version: '3.8'
 services:
   api:
     build: .
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     volumes:
       - .:/usr/src/app
     command: go run main.go -b 0.0.0.0
+
+  db:
+    image: postgres:16.0-alpine3.18
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:7.7
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PG_ADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PG_ADMIN_PASSWD}
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+
+volumes:
+  postgres-db:

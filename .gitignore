@@ -24,3 +24,5 @@ go.work
 # Example data
 #data/
 
+# Environment variables
+.env

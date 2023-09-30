@@ -1,14 +1,15 @@
 package endpoints
 
 import (
-	"github.com/HPancieri/AlbumAPI/data"
-	"github.com/HPancieri/AlbumAPI/types"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/HPancieri/AlbumAPI/data"
+	"github.com/HPancieri/AlbumAPI/models"
+	"github.com/gin-gonic/gin"
 )
 
 func PostAlbum(c *gin.Context) {
-	var newAlbum types.Album
+	var newAlbum models.Album
 
 	if err := c.BindJSON(&newAlbum); err != nil {
 		return

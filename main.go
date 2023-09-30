@@ -1,11 +1,14 @@
 package main
 
 import (
+	"github.com/HPancieri/AlbumAPI/database"
 	"github.com/HPancieri/AlbumAPI/endpoints"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	database.ConnectDb()
+
 	router := gin.Default()
 	router.GET("/albums", endpoints.GetAlbums)
 	router.GET("/albums/:id", endpoints.GetAlbumById)
