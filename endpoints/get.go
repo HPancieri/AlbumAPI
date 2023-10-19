@@ -1,23 +1,47 @@
 package endpoints
 
 import (
-	"github.com/HPancieri/AlbumAPI/data"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/HPancieri/AlbumAPI/database"
+	"github.com/gin-gonic/gin"
 )
 
+type result struct {
+	ID     string  `json:"ID"`
+	Title  string  `json:"title"`
+	Artist string  `json:"artist"`
+	Price  float32 `json:"price"`
+}
+
 func GetAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, data.Albums)
+	var res []result
+
+	database.DB.Db.Raw(
+		"SELECT id, title, artist, price FROM albums;",
+	).Scan(&res)
+
+	if len(res) == 0 {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "there are no values in the database"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, res)
 }
 
 func GetAlbumById(c *gin.Context) {
 	id := c.Param("id")
+	var res result
 
-	for _, album := range data.Albums {
-		if album.ID == id {
-			c.IndentedJSON(http.StatusOK, album)
-			return
-		}
+	response := database.DB.Db.Raw(
+		"SELECT id, title, artist, price FROM albums WHERE id = ?",
+		id,
+	).Scan(&res)
+
+	if response.RowsAffected == 0 {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+		return
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+
+	c.IndentedJSON(http.StatusOK, res)
 }
